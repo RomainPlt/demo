@@ -1,13 +1,15 @@
-version: '3'
+version: '3.4'
 services:
-        demo:
-                image: romainplt/demo
-                ports:
-                 - "8080:8080"
-                command: java -jar /build/libs/demo-0.0.1-SNAPSHOT.jar
-                devices:
-                 - /dev/isgx:/dev/isgx
-                environment:
-                 - SCONE_LOG=7
-                 - SCONE_MODE=HW
-                
+  demo:
+    image: romainplt/demo
+    container_name: demo
+    ports:
+      - 8080:8080
+    devices:
+      - /dev/isgx
+    environment:
+      - SCONE_VERSION=1
+      - SCONE_LOG=7
+      - SCONE_MODE=HW
+      - SCONE_HEAP=2G
+      - JAVA_TOOL_OPTIONS=-Xmx64m
