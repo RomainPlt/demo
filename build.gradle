@@ -1,5 +1,5 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.5.RELEASE'
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
 }
@@ -24,32 +24,13 @@ test {
 	useJUnitPlatform()
 }
 
-def imageName = "nexus.iex.ec/iexec-sms"
 def trustedDockerfileName = "Dockerfile-trusted"
 def untrustedDockerfileName = "Dockerfile-untrusted"
-
-
-def gitBranch = 'git name-rev --name-only HEAD'.execute().text.trim()
-def isMasterBranch = gitBranch == "master"
-def isDevelopBranch = gitBranch == "develop"
-def canUploadArchives = (isMasterBranch || isDevelopBranch ) && project.hasProperty("nexusUser") && project.hasProperty("nexusPassword")
-def gitShortCommit = 'git rev-parse --short HEAD'.execute().text.trim()
-def isSnapshotVersion = project.version.contains("SNAPSHOT")
-
-project.ext.getDockerImageNameFull = {
-	def imageNameWithVersion = imageName + ":${version}"
-	if (isSnapshotVersion) {
-		return imageNameWithVersion + "-" + gitShortCommit
-	} else {
-		return imageNameWithVersion
-	}
-}
-
 
 task buildImage(type: Exec) {
 
 	description 'Building demo Docker image'
-	commandLine("sh", "-c", "docker image build -f " + untrustedDockerfileName + " -t " + "romainplt/demo" + " . ")
+	commandLine("sh", "-c", "docker image build -f " + trustedDockerfileName + " -t " + "romainplt/demo" + " . ")
 	standardOutput = new ByteArrayOutputStream()
 
 	ext.output = {
