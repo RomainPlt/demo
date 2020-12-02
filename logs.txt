@@ -1,0 +1,27 @@
+Attaching to demo
+[36mdemo    |[0m export SCONE_QUEUES=4
+[36mdemo    |[0m export SCONE_SLOTS=256
+[36mdemo    |[0m export SCONE_SIGPIPE=0
+[36mdemo    |[0m export SCONE_MMAP32BIT=0
+[36mdemo    |[0m export SCONE_SSPINS=100
+[36mdemo    |[0m export SCONE_SSLEEP=4000
+[36mdemo    |[0m export SCONE_LOG=7
+[36mdemo    |[0m export SCONE_HEAP=2147483648
+[36mdemo    |[0m export SCONE_STACK=2097152
+[36mdemo    |[0m export SCONE_CONFIG=/etc/sgx-musl.conf
+[36mdemo    |[0m export SCONE_ESPINS=10000
+[36mdemo    |[0m export SCONE_MODE=hw
+[36mdemo    |[0m export SCONE_ALLOW_DLOPEN=yes (unprotected)
+[36mdemo    |[0m export SCONE_MPROTECT=no
+[36mdemo    |[0m musl version: 1.1.24
+[36mdemo    |[0m Revision: 6ed96c8196086e51f2f4549a4361e8eb6c9b5f52 (Tue Aug 4 13:42:08 2020 +0200)
+[36mdemo    |[0m Branch: iexec-scone-3.0.0 (dirty)
+[36mdemo    |[0m 
+[36mdemo    |[0m Enclave hash: fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952
+[36mdemo    |[0m [SCONE|WARN] src/syscall/syscall.c:698:__scone_syscall_unshielded(): system call: SYS_membarrier, number 324 is not implemented.
+[36mdemo    |[0m [SCONE|WARN] src/syscall/syscall.c:698:__scone_syscall_unshielded(): system call: SYS_membarrier, number 324 is not implemented.
+[36mdemo    |[0m Picked up JAVA_TOOL_OPTIONS: -Xmx64m
+[36mdemo    |[0m [SCONE|WARN] src/shielding/proc_fs.c:368:_proc_fs_open(): open: /proc/self/mountinfo is not supported
+[36mdemo    |[0m [SCONE|WARN] src/shielding/proc_fs.c:368:_proc_fs_open(): open: /proc/self/coredump_filter is not supported
+[36mdemo    |[0m [SCONE|WARN] src/shielding/proc_fs.c:368:_proc_fs_open(): open: /proc/self/coredump_filter is not supported
+[36mdemo    |[0m [SCONE|WARN] src/syscall/syscall.c:698:__scone_syscall_unshielded(): system call: SYS_membarrier, number 324 is not implemented.

@@ -12,6 +12,28 @@ public class GreetingController {
     private static final String template = "Hello, %s!";
     private static final String questTemplate = "%s ?";
     private final AtomicLong counter = new AtomicLong();
+    private String poids;
+    private String taille;
+    private String spoids;
+    private String staille;
+
+
+    @GetMapping("/imc")
+    public Imc imc(){
+        poids=System.getenv("POIDS");
+        taille=System.getenv("TAILLE");
+
+        return new Imc(poids, taille);
+    }
+
+    //@GetMapping("/secretimc")
+    //public Imc secretImc(){
+    //    spoids=System.getenv("SECRET_POIDS");
+    //    staille=System.getenv("SECRET_TAILLE");
+
+    //    return new Imc(spoids, staille);
+
+    //}
 
     @GetMapping("/greeting")
     public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name,

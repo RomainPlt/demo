@@ -3,13 +3,13 @@ package com.example.demo.restservice;
 public class Greeting {
 
     private final long id;
-    private final String content;
+    private final String name;
     private final String question;
 
-    public Greeting(long id, String content, String question) {
+    public Greeting(long id, String name, String question) {
         this.id = id;
         this.question = question;
-        this.content = content;
+        this.name = name;
     }
 
     public long getId() {
@@ -17,7 +17,7 @@ public class Greeting {
     }
 
     public String getContent() {
-        return content;
+        return name;
     }
 
     public String getQuestion(){
