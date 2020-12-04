@@ -1,25 +1,25 @@
-Sending build context to Docker daemon  18.51MB
+Sending build context to Docker daemon  18.55MB
 Step 1/6 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
  ---> 5a8a620823b3
 Step 2/6 : ARG JAR_FILE=build/libs/*.jar
- ---> Running in 7561b6ba1a82
-Removing intermediate container 7561b6ba1a82
- ---> 9bcc00ff4f77
+ ---> Running in 660a373f7bb8
+Removing intermediate container 660a373f7bb8
+ ---> aad2531d5316
 Step 3/6 : COPY ${JAR_FILE} app.jar
- ---> eaaad16e4ceb
+ ---> 5311cb75c0e5
 Step 4/6 : RUN which java
- ---> Running in 0a585a090eb3
+ ---> Running in 8dd3e0b2e690
 /usr/bin/java
-Removing intermediate container 0a585a090eb3
- ---> 80030209f1ad
-Step 5/6 : RUN SCONE_HEAP=28900K SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java app.jar
- ---> Running in 6b5a28327ee6
-ec5e565b376d79171f782cc8a7224bf5d9ba25e5bf26fc79a0763eec1d7cdb6e
-Removing intermediate container 6b5a28327ee6
- ---> d2671a18c121
+Removing intermediate container 8dd3e0b2e690
+ ---> a470fc62c472
+Step 5/6 : RUN SCONE_HEAP=3G SCONE_LOG=7 SCONE_MODE=hw SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
+ ---> Running in 1033467a426f
+f14e4694961e1d5cad56153e2a7a19376c196e22b89566665f34823c9e8f2a78
+Removing intermediate container 1033467a426f
+ ---> 1c9e42dd2801
 Step 6/6 : ENTRYPOINT ["java","-jar","/app.jar"]
- ---> Running in 0b616b449d56
-Removing intermediate container 0b616b449d56
- ---> e4319258a056
-Successfully built e4319258a056
+ ---> Running in 3010450dee39
+Removing intermediate container 3010450dee39
+ ---> 58e397d15c1a
+Successfully built 58e397d15c1a
 Successfully tagged romainplt/demo:latest

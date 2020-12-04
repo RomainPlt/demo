@@ -2,6 +2,6 @@ FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
 RUN which java
-RUN SCONE_HEAP=28900K SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java app.jar
+RUN SCONE_HEAP=3G SCONE_LOG=7 SCONE_MODE=hw SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 
