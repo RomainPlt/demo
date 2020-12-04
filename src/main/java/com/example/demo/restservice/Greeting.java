@@ -8,8 +8,8 @@ public class Greeting {
 
     public Greeting(long id, String name, String question) {
         this.id = id;
-        this.question = question;
         this.name = name;
+        this.question = question;
     }
 
     public long getId() {
