@@ -13,3 +13,4 @@ services:
       - SCONE_MODE=HW
       - SCONE_HEAP=2G
       - JAVA_TOOL_OPTIONS=-Xmx64m
+      - PATH_TO_FILE=/home/romain/Documents/rest_app/secrets/
