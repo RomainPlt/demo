@@ -1,5 +1,7 @@
 package com.example.demo.restservice;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,12 +26,14 @@ public class Secret {
         return this.key;
     }
 
-    public void writeSecret() throws IOException {
+    public void writeSecretToDB(JdbcTemplate jdbcTemplate) {
+        jdbcTemplate.execute("INSERT INTO Secrets(key,secret) VALUES ('"+this.getKey()+"' ,'"+this.getSecret()+"')");
+
+    }
+
+    public void writeSecretToFile() throws IOException {
 
         String path = "/home/romain/Documents/rest_app/secrets/" + this.getKey() + ".txt";
-
-
-
         FileWriter fileWriter = new FileWriter(path);
         PrintWriter printWriter = new PrintWriter(fileWriter);
         printWriter.print(this.getSecret());
