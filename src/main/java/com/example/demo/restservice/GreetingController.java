@@ -55,7 +55,7 @@ public class GreetingController {
 
     public String getSecretFromDB(String key) throws SQLException {
         String secrets = "";
-        conn = DriverManager.getConnection("jdbc:h2:file:./data/secretsDB", "sa", "admin");
+        conn = DriverManager.getConnection("jdbc:h2:file:/home/romain/Documents/rest_app/demo/data/secretsDB", "sa", "admin");
         System.out.println("Creating statement...");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT secret FROM Secrets WHERE key = '" + key +"'");
