@@ -23,7 +23,16 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
     public Imc test_imc;
     public Secret secret;
-    public Connection conn;
+    public static Connection conn;
+
+    static {
+        try {
+            conn = DriverManager.getConnection("jdbc:h2:file:/home/romain/Documents/rest_app/demo/data/secretsDB", "sa", "admin");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -46,31 +55,29 @@ public class GreetingController {
     public Greeting getSecret(@RequestParam(value = "key", defaultValue = "") String key) throws IOException, SQLException {
 
         //get secret from DB
-        String unlockedSecret = getSecretFromDB(key);
+        Secret unlockedSecret = getSecretFromDB(key);
+
         //get secret from file using key
         //String unlockedSecret = getSecretFromFile(key);
 
-        return new Greeting("You used this key : " + key, unlockedSecret);
+        if (unlockedSecret.getSecret() == ""){
+            return new Greeting("You used this key : " + key, "Your secret is empty or this key doesn't exist");
+        }else {
+            return new Greeting("You used this key : " + key, "You're secret is : " + unlockedSecret);
+        }
     }
 
-    public String getSecretFromDB(String key) throws SQLException {
-        String secrets = "";
-        conn = DriverManager.getConnection("jdbc:h2:file:/home/romain/Documents/rest_app/demo/data/secretsDB", "sa", "admin");
+    public Secret getSecretFromDB(String key) throws SQLException {
+        Secret secrets = null;
         System.out.println("Creating statement...");
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT secret FROM Secrets WHERE key = '" + key +"'");
         while (rs.next()) {
-            secrets = rs.getString(1);
+            secrets = new Secret(rs.getString(1), key);
         }
         conn.close();
-        String returnedSecret;
-        if (secrets == ""){
-            returnedSecret = "This key doesn't exist.";
-        }
-        else{
-            returnedSecret = "Your secret is : " + secrets;
-        }
-        return returnedSecret;
+
+        return secrets;
     }
 
     public String getSecretFromFile(String key) throws IOException {
@@ -78,7 +85,6 @@ public class GreetingController {
         String content = Files.readString(pathToFile);
         return content;
     }
-
 
     public void createTable(){
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
