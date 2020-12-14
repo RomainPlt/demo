@@ -34,14 +34,17 @@ public class GreetingController {
     }
 
 
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    public GreetingController(JdbcTemplate jdbcTemplate){
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
+    }
 
     @GetMapping("/pushsecret")
     public Greeting pushSecret(@RequestParam(value = "secret", defaultValue = "mySecret") String pushedSecret,
                                @RequestParam(value = "key", defaultValue = "mickey") String pushedKey) throws IOException {
-
-        this.createTable();
 
         this.secret  = new Secret(pushedSecret, pushedKey);
 
