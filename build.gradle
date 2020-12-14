@@ -35,7 +35,7 @@ def untrustedDockerfileName = "Dockerfile-untrusted"
 task buildImage(type: Exec) {
 
 	description 'Building demo Docker image'
-	commandLine("sh", "-c", "docker image build -f " + untrustedDockerfileName + " -t " + "romainplt/demo" + " . ")
+	commandLine("sh", "-c", "docker image build -f " + trustedDockerfileName + " -t " + "romainplt/demo" + " . ")
 	standardOutput = new ByteArrayOutputStream()
 
 	ext.output = {
