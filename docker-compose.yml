@@ -8,7 +8,7 @@ services:
     devices:
       - /dev/isgx
     volumes:
-            - demo:/home/romain/Documents/rest_app/demo:rw
+            - demo:/home/demo:rw
     environment:
       - SCONE_VERSION=1
       - SCONE_LOG=7
