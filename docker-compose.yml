@@ -7,9 +7,17 @@ services:
       - 8080:8080
     devices:
       - /dev/isgx
+    volumes:
+      - /home/romain/Documents/rest_app/demo:/home/romain/Documents/rest_app/demo
     environment:
       - SCONE_VERSION=1
       - SCONE_LOG=7
       - SCONE_MODE=HW
       - SCONE_HEAP=2G
       - JAVA_TOOL_OPTIONS=-Xmx64m
+    networks:
+      - romain-net
+
+networks:
+  romain-net:
+    external: true
