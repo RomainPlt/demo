@@ -27,7 +27,7 @@ public class GreetingController {
 
     static {
         try {
-            conn = DriverManager.getConnection("jdbc:h2:file:/home/romain/Documents/rest_app/demo/data/secretsDB", "sa", "admin");
+            conn = DriverManager.getConnection("jdbc:h2:file:/tmp/demo/database", "sa", "admin");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -41,6 +41,19 @@ public class GreetingController {
     public GreetingController(JdbcTemplate jdbcTemplate){
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
     }
+
+    @GetMapping("/secret")
+    public Greeting pushSecretFromeSession(){
+        String secret=System.getenv("SECRET");
+        String key=System.getenv("KEY");
+        Secret secretSession = new Secret(secret,key);
+
+        secretSession.writeSecretToDB(jdbcTemplate);
+
+        return new Greeting("Your secret : " + secretSession.getSecret() +" , have been posted to the database.", "Your key is : " + secretSession.getKey());
+
+    }
+
 
     @GetMapping("/pushsecret")
     public Greeting pushSecret(@RequestParam(value = "secret", defaultValue = "mySecret") String pushedSecret,
@@ -66,7 +79,7 @@ public class GreetingController {
         if (unlockedSecret.getSecret() == ""){
             return new Greeting("You used this key : " + key, "Your secret is empty or this key doesn't exist");
         }else {
-            return new Greeting("You used this key : " + key, "You're secret is : " + unlockedSecret);
+            return new Greeting("You used this key : " + key, "You're secret is : " + unlockedSecret.getSecret());
         }
     }
 
@@ -78,7 +91,6 @@ public class GreetingController {
         while (rs.next()) {
             secrets = new Secret(rs.getString(1), key);
         }
-        conn.close();
 
         return secrets;
     }
@@ -87,11 +99,6 @@ public class GreetingController {
         Path pathToFile = Path.of("/home/romain/Documents/rest_app/secrets/" + key + ".txt");
         String content = Files.readString(pathToFile);
         return content;
-    }
-
-    public void createTable(){
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
-
     }
 
     @GetMapping("/secretimc")
@@ -103,8 +110,8 @@ public class GreetingController {
     }
 
     @GetMapping("/greeting")
-    public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name,
-                             @RequestParam(value = "question", defaultValue = "Est-ceque ça marche ?") String question) {
+    public Greeting greeting(@RequestParam(value = "secret", defaultValue = "World") String name,
+                             @RequestParam(value = "key", defaultValue = "Est-ceque ça marche ?") String question) {
         return new Greeting(String.format(template, name), String.format(questTemplate, question));
     }
 }
