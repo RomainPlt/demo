@@ -1,6 +1,5 @@
 FROM adoptopenjdk/openjdk11:jdk-11.0.9_11-alpine
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar
-RUN scone fspf create fspf.pb
 ENTRYPOINT ["java","-jar","/app.jar"]
 
