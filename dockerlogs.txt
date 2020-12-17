@@ -1,25 +1,44 @@
-Sending build context to Docker daemon  23.07MB
-Step 1/6 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
+Sending build context to Docker daemon  27.73MB
+Step 1/7 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
  ---> 5a8a620823b3
-Step 2/6 : ARG JAR_FILE=build/libs/*.jar
- ---> Running in 9e04ac8de8fe
-Removing intermediate container 9e04ac8de8fe
- ---> 79b7c71c7f61
-Step 3/6 : COPY ${JAR_FILE} app.jar
- ---> c90782723b99
-Step 4/6 : RUN which java
- ---> Running in 2899a53db422
+Step 2/7 : ARG JAR_FILE=build/libs/*.jar
+ ---> Running in 4ef64242a8a8
+Removing intermediate container 4ef64242a8a8
+ ---> 43b559eabbd2
+Step 3/7 : COPY ${JAR_FILE} app.jar
+ ---> d154162fe756
+Step 4/7 : RUN which java
+ ---> Running in be5fce31b408
 /usr/bin/java
-Removing intermediate container 2899a53db422
- ---> 8e480e104587
-Step 5/6 : RUN SCONE_HEAP=2G SCONE_LOG=7 SCONE_MODE=hw SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
- ---> Running in baa20a3d951a
+Removing intermediate container be5fce31b408
+ ---> fa65145ce1d4
+Step 5/7 : RUN SCONE_HEAP=2G SCONE_LOG=7 SCONE_MODE=hw SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
+ ---> Running in 8eaa23102631
 fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952
-Removing intermediate container baa20a3d951a
- ---> 0021e5c8a808
-Step 6/6 : ENTRYPOINT ["java","-jar","/app.jar"]
- ---> Running in d03c0f6c9c15
-Removing intermediate container d03c0f6c9c15
- ---> 75e1e291a629
-Successfully built 75e1e291a629
+Removing intermediate container 8eaa23102631
+ ---> 62ddec3c78bf
+Step 6/7 : RUN scone --help
+ ---> Running in fde5eca275ef
+Usage: scone [OBJECT|--version|--help]
+Install, operate and check a Secure CONtainer Environment.
+
+Commands:
+  host      install and/or check patched SGX driver and Docker engine.
+  cas       configuration and attestation service.
+  fspf      file system protection.
+  swarm     manage docker swarm
+  service   a thin wrapper around docker service commands
+  session   manages key namespaces
+
+
+Options:
+  -h, --help    show this help message
+  -v, --version show software version
+Removing intermediate container fde5eca275ef
+ ---> 9022e20b073b
+Step 7/7 : ENTRYPOINT ["java","-jar","/app.jar"]
+ ---> Running in ea7c9224474c
+Removing intermediate container ea7c9224474c
+ ---> ce64019579fd
+Successfully built ce64019579fd
 Successfully tagged romainplt/demo:latest
