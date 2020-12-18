@@ -8,11 +8,11 @@ services:
     devices:
       - /dev/isgx
     volumes:
-      - demo:/tmp/demo:rw
+      - /home/romain/Documents/rest_app/demo/data:/tmp/demo/data:rw
     environment:
       - SCONE_VERSION=1
       - SCONE_LOG=7
-      - SCONE_MODE=HW
+      - SCONE_MODE=SIM
       - SCONE_HEAP=2G
       - JAVA_TOOL_OPTIONS=-Xmx64m
     networks:
