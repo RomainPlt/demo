@@ -8,7 +8,8 @@ RUN SCONE_MODE=sim
 
 RUN SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
 
-RUN mkdir conf/ && scone fspf create fspf.pb
+RUN mkdir conf/
+RUN scone fspf create fspf.pb
 
 RUN scone --help
 
