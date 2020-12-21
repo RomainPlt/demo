@@ -27,7 +27,7 @@ public class GreetingController {
 
     static {
         try {
-            conn = DriverManager.getConnection("jdbc:h2:file:/tmp/demo/database", "sa", "admin");
+            conn = DriverManager.getConnection("jdbc:h2:file:/tmp/demo/data/database", "sa", "admin");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
