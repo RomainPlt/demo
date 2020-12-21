@@ -1,36 +1,36 @@
-Sending build context to Docker daemon  29.69MB
+Sending build context to Docker daemon  32.15MB
 Step 1/7 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
  ---> 5a8a620823b3
 Step 2/7 : ARG JAR_FILE=build/libs/*.jar
- ---> Running in d92c258934e3
-Removing intermediate container d92c258934e3
- ---> 10a07570f9c7
+ ---> Running in da28c5a6723b
+Removing intermediate container da28c5a6723b
+ ---> d2f67054e9ed
 Step 3/7 : COPY ${JAR_FILE} app.jar
- ---> 57890022fab5
+ ---> 645dbae05e4b
 Step 4/7 : RUN which java
- ---> Running in 50ef04069ea9
+ ---> Running in da947d525d75
 /usr/bin/java
-Removing intermediate container 50ef04069ea9
- ---> 6efeaa2bc914
-Step 5/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb && scone fspf addr fspf.pb / --not-protected --kernel / && scone fspf addr fspf.pb /tmp/demo/data --encrypted --kernel /tmp/demo/data && scone fspf addf fspf.pb /tmp/demo/data /tmp/demo/data && scone fspf encrypt ./fspf.pb > /conf/keytag 			  && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    && FSPF_KEY=$(cat conf/keytag | awk '{print $11}')		                && echo "<MRENCLAVE>$MRENCLAVE</MRENCLAVE>"             && echo "<FSPF_KEY>$FSPF_KEY</FSPF_KEY>"			                    && echo "<FSPF_TAG>$FSPF_TAG</FSPF_TAG>"
- ---> Running in c1d00afe90db
-Created empty file system protection file in fspf.pb. AES-GCM tag: a533a86277d8427e9393f72346ec2661
-Added region / to file system protection file fspf.pb new AES-GCM tag: 58e6240b4970cb660f7765e2d292eaf3
-Added region /tmp/demo/data to file system protection file fspf.pb new AES-GCM tag: d95194de9571f82de43dc7097b806314
-Added files to file system protection file fspf.pb new AES-GCM tag: 51c83ddbbdb885bde17e510e6dda908e
+Removing intermediate container da947d525d75
+ ---> 0d963c8221e1
+Step 5/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb && scone fspf addr fspf.pb /  --not-protected --kernel / && scone fspf addr fspf.pb /tmp/demo/data --encrypted --kernel /tmp/demo/data && scone fspf addf fspf.pb /tmp/demo/data /tmp/demo/data && scone fspf encrypt ./fspf.pb > /conf/keytag                          && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    && FSPF_KEY=$(cat conf/keytag | awk '{print $11}')		                && echo "<MRENCLAVE>$MRENCLAVE</MRENCLAVE>"                             && echo "<FSPF_KEY>$FSPF_KEY</FSPF_KEY>"			                    && echo "<FSPF_TAG>$FSPF_TAG</FSPF_TAG>"
+ ---> Running in 2f27a0dca157
+Created empty file system protection file in fspf.pb. AES-GCM tag: c51bb0e5949463142324bc3715414e30
+Added region / to file system protection file fspf.pb new AES-GCM tag: 952616f2a9c40bd7fcf63d528f660a4b
+Added region /tmp/demo/data to file system protection file fspf.pb new AES-GCM tag: c2ed51c35bcf973527db8c37b3e54b36
+Added files to file system protection file fspf.pb new AES-GCM tag: 192e9b56da3eadc355c2b4d46053b96c
 <MRENCLAVE>fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952</MRENCLAVE>
-<FSPF_KEY>e10d4c0fe6eb1f3833f537374989ff1140b0cd32234e7914f1b16642bb15c164</FSPF_KEY>
-<FSPF_TAG>3afe9acb1f27b9aee36b0c10f0e8bd95</FSPF_TAG>
-Removing intermediate container c1d00afe90db
- ---> 045bf02ee309
+<FSPF_KEY>23b3bd3d3ac093691051f86432a8873d684fb2f251c902576e9e0796b3071324</FSPF_KEY>
+<FSPF_TAG>ab682ea58f2159bd2edb81ecc20318cd</FSPF_TAG>
+Removing intermediate container 2f27a0dca157
+ ---> d9f1305dd04c
 Step 6/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
- ---> Running in ffe74dfcfdac
+ ---> Running in b43ea56209c7
 fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952
-Removing intermediate container ffe74dfcfdac
- ---> 5a78533a7106
+Removing intermediate container b43ea56209c7
+ ---> 6f9575c9f33f
 Step 7/7 : ENTRYPOINT ["java","-jar","/app.jar"]
- ---> Running in 726d782edad8
-Removing intermediate container 726d782edad8
- ---> b9b18becd447
-Successfully built b9b18becd447
+ ---> Running in 62c1b6fbfb26
+Removing intermediate container 62c1b6fbfb26
+ ---> 2e32d357c5f3
+Successfully built 2e32d357c5f3
 Successfully tagged romainplt/demo:latest

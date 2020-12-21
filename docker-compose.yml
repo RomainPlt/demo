@@ -12,7 +12,7 @@ services:
     environment:
       - SCONE_VERSION=1
       - SCONE_LOG=7
-      - SCONE_MODE=SIM
+      - SCONE_MODE=sim
       - SCONE_HEAP=2G
       - JAVA_TOOL_OPTIONS=-Xmx64m
     networks:
