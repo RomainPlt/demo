@@ -2,20 +2,20 @@ package com.example.demo.restservice;
 
 public class Greeting {
 
-    private final String name;
-    private final String question;
+    private final String secret;
+    private final String key;
 
-    public Greeting( String name, String question) {
-        this.name = name;
-        this.question = question;
+    public Greeting( String secret, String key) {
+        this.secret = secret;
+        this.key = key;
     }
 
 
     public String getName() {
-        return name;
+        return secret;
     }
 
     public String getQuestion(){
-        return question;
+        return key;
     }
 }
