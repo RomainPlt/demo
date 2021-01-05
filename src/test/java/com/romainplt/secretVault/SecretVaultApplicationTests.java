@@ -1,10 +1,10 @@
-package com.example.demo;
+package com.romainplt.secretVault;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class SecretVaultApplicationTests {
 
 	@Test
 	void contextLoads() {

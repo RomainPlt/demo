@@ -5,7 +5,7 @@ plugins {
 
 }
 
-group = 'com.example'
+group = 'com.romainplt'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
@@ -41,8 +41,8 @@ task buildImage(type: Exec) {
 	}
 
 
-	description 'Building demo Docker image'
-	commandLine("sh", "-c", "docker image build -f " + trustedDockerfileName + " -t " + "romainplt/demo" + " . ")
+	description 'Building secretVault Docker image'
+	commandLine("sh", "-c", "docker image build -f " + trustedDockerfileName + " -t " + "romainplt/secretvault" + " . ")
 	standardOutput = new ByteArrayOutputStream()
 
 
