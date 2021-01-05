@@ -1,6 +1,6 @@
 # secretVault
 
-secretVault will allow you to push and get secret to an H2 database.
+secretVault will allow you to push and get secret with an H2 database.
 
 localhost:8080/secretVault/pushsecrets
 localhost:8080/secretVault/getsecrets
