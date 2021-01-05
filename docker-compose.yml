@@ -1,20 +1,20 @@
 version: '3.4'
 services:
-  demo:
-    image: romainplt/demo
-    container_name: demo
+  secretVault:
+    image: romainplt/secretvault
+    container_name: secretvault
     ports:
       - 8080:8080
     devices:
       - /dev/isgx
     volumes:
-      - /home/romain/Documents/rest_app/demo/data:/tmp/demo/data:rw
+      - /home/romain/Documents/rest_app/secretVault/data:/tmp/secretVault/data:rw
     environment:
       - SCONE_LAS_ADDR=las
-      - SCONE_CONFIG_ID=session_demo/demo
+      - SCONE_CONFIG_ID=session_secretVault/secretVault
       - SCONE_CAS_ADDR=cas
       - SCONE_FORK=1
-      - SCONE_SESSION_ID=session_demo
+      - SCONE_SESSION_ID=session_secretVault
       - SCONE_VERSION=1
       - SCONE_LOG=7
       - SCONE_MODE=hw
@@ -23,7 +23,7 @@ services:
       - romain-net
 
 volumes:
-  demo:
+  secretVault:
     external: true
 
 networks:

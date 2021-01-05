@@ -1,4 +1,4 @@
-package com.example.demo.restservice;
+package com.romainplt.secretVault.restservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -6,33 +6,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.concurrent.atomic.AtomicLong;
-
 
 @RestController
-@RequestMapping("/demo")
-public class GreetingController {
+@RequestMapping("/secretvault")
+public class SecretPrinterController {
 
-    private static final String template = "Hello, %s!";
-    private static final String questTemplate = "%s ?";
-    private final AtomicLong counter = new AtomicLong();
     public Imc test_imc;
     public Secret secret;
     public static Connection conn;
 
     static {
         try {
-            conn = DriverManager.getConnection("jdbc:h2:file:/tmp/demo/data/database", "sa", "admin");
+            conn = DriverManager.getConnection("jdbc:h2:file:/tmp/secretVault/data/database", "sa", "admin");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -41,10 +30,9 @@ public class GreetingController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public GreetingController(JdbcTemplate jdbcTemplate){
+    public SecretPrinterController(JdbcTemplate jdbcTemplate){
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
     }
-
 
     public static String getFileChecksum(MessageDigest digest, File file) throws IOException
     {
@@ -78,73 +66,71 @@ public class GreetingController {
         return sb.toString();
     }
 
-
-
-
+    /*
+    Print the database's hash
+     */
     @GetMapping("/db/print")
-    public Greeting printDb() throws IOException, NoSuchAlgorithmException {
-        File db = new File("/tmp/demo/data/database.mv.db");
+    public SecretPrinter printDb() throws IOException, NoSuchAlgorithmException {
+        File db = new File("/tmp/secretVault/data/database.mv.db");
         MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
         String shaCheckSum = getFileChecksum(shaDigest, db);
-        return new Greeting(shaCheckSum , "database");
+        return new SecretPrinter(shaCheckSum , "database");
     }
 
-
-
+    /*
+    Print the fspf volume's hash
+     */
     @GetMapping("/volume/print")
-    public Greeting printVolume() throws IOException, NoSuchAlgorithmException {
-        File volume = new File("/tmp/demo/data/volume.fspf");
+    public SecretPrinter printVolume() throws IOException, NoSuchAlgorithmException {
+        File volume = new File("/tmp/secretVault/data/volume.fspf");
         MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
         String shaCheckSum = getFileChecksum(shaDigest, volume);
-        return new Greeting(shaCheckSum , "volume");
+        return new SecretPrinter(shaCheckSum , "volume");
     }
 
-
-
+    /*
+    Retrieve secrets and keys from session on CAS and :
+        - Write them in the H2 Database
+        - Print them
+     */
     @GetMapping("/secret")
-    public Greeting pushSecretFromeSession(){
+    public SecretPrinter pushSecretFromSession(){
         String secret=System.getenv("SECRET");
         String key=System.getenv("KEY");
         Secret secretSession = new Secret(secret,key);
-
         secretSession.writeSecretToDB(jdbcTemplate);
-
-        return new Greeting("Your secret : " + secretSession.getSecret() +" , have been posted to the database.", "Your key is : " + secretSession.getKey());
+        return new SecretPrinter(secretSession.getSecret() , secretSession.getKey(), "Your secret and key have " +
+                "been pushed to the database. You can see them at localhost:8080/h2-console");
 
     }
 
-
+    /*
+    Allows you to push secret to the database without going through session or CAS
+     */
     @GetMapping("/pushsecret")
-    public Greeting pushSecret(@RequestParam(value = "secret", defaultValue = "mySecret") String pushedSecret,
-                               @RequestParam(value = "key", defaultValue = "mickey") String pushedKey) throws IOException {
-
+    public SecretPrinter pushSecret(@RequestParam(value = "secret", defaultValue = "mySecret") String pushedSecret,
+                               @RequestParam(value = "key", defaultValue = "mickey") String pushedKey) {
         this.secret  = new Secret(pushedSecret, pushedKey);
-
         this.secret.writeSecretToDB(jdbcTemplate);
-        //secret.writeSecretToFile();
-
-        return new Greeting( "Your secret is : " + secret.getSecret(), "Your key for your secret is : " + secret.getKey());
+        return new SecretPrinter( secret.getSecret(), secret.getKey());
     }
 
+    /*
+    Allows you to get secrets from the H2 database using the corresponding key.
+     */
     @GetMapping("/getsecret")
-    public Greeting getSecret(@RequestParam(value = "key", defaultValue = "") String key) throws IOException, SQLException {
-
-        //get secret from DB
+    public SecretPrinter getSecret(@RequestParam(value = "key", defaultValue = "") String key) throws SQLException {
         Secret unlockedSecret = getSecretFromDB(key);
-
-        //get secret from file using key
-        //String unlockedSecret = getSecretFromFile(key);
-
         if (unlockedSecret.getSecret() == "") {
-            return new Greeting("You used this key : " + key, "Your secret is empty or this key doesn't exist");
+            return new SecretPrinter("Your secret is empty or this key doesn't exist.", key);
         } else {
-            return new Greeting("You used this key : " + key, "You're secret is : " + unlockedSecret.getSecret());
-
+            return new SecretPrinter(unlockedSecret.getSecret(), key );
         }
     }
 
-
-
+    /*
+    Will go through the H2 database to retrieve a Secret corresponding ti the given Key.
+     */
     public Secret getSecretFromDB(String key) throws SQLException {
         Secret secrets = null;
         System.out.println("Creating statement...");
@@ -153,28 +139,6 @@ public class GreetingController {
         while (rs.next()) {
             secrets = new Secret(rs.getString(1), key);
         }
-
         return secrets;
-    }
-
-    public String getSecretFromFile(String key) throws IOException {
-        // WHEN PLAYING WITH PATH ASK YOURSELF : ARE YOU INSIDE DOCKER ?
-        Path pathToFile = Path.of("/home/romain/Documents/rest_app/secrets/" + key + ".txt");
-        String content = Files.readString(pathToFile);
-        return content;
-    }
-
-    @GetMapping("/secretimc")
-    public Greeting greeting1(@RequestParam(value = "name", defaultValue = "World") String name) {
-        String sWeight=System.getenv("SECRET_WEIGHT");
-        String sHeight=System.getenv("SECRET_HEIGHT");
-        test_imc = new Imc(sWeight, sHeight);
-        return new Greeting( String.format(template, name), test_imc.getImc());
-    }
-
-    @GetMapping("/greeting")
-    public Greeting greeting(@RequestParam(value = "secret", defaultValue = "World") String name,
-                             @RequestParam(value = "key", defaultValue = "Est-ceque ça marche ?") String question) {
-        return new Greeting(String.format(template, name), String.format(questTemplate, question));
     }
 }
