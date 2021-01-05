@@ -1,4 +1,9 @@
-# demo
+# secretVault
+
+docker-compose up secretVault
+
+
+
 
 Builder l'appli : ./gradlew build 
 Lancer l'appli : java -jar build/libs/demo-0.0.1-SNAPSHOT.jar
