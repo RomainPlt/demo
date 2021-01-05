@@ -1,4 +1,4 @@
-package com.romainplt.secretVault.restservice;
+package com.romainplt.secretvault.restservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,9 +13,8 @@ import java.sql.*;
 
 @RestController
 @RequestMapping("/secretvault")
-public class SecretPrinterController {
+public class SecretController {
 
-    public Imc test_imc;
     public Secret secret;
     public static Connection conn;
 
@@ -27,44 +26,15 @@ public class SecretPrinterController {
         }
     }
 
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public SecretPrinterController(JdbcTemplate jdbcTemplate){
+    public SecretController(JdbcTemplate jdbcTemplate){
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
     }
 
-    public static String getFileChecksum(MessageDigest digest, File file) throws IOException
-    {
-        //Get file input stream for reading the file content
-        FileInputStream fis = new FileInputStream(file);
 
-        //Create byte array to read data in chunks
-        byte[] byteArray = new byte[1024];
-        int bytesCount = 0;
-
-        //Read file data and update in message digest
-        while ((bytesCount = fis.read(byteArray)) != -1) {
-            digest.update(byteArray, 0, bytesCount);
-        };
-
-        //close the stream; We don't need it now.
-        fis.close();
-
-        //Get the hash's bytes
-        byte[] bytes = digest.digest();
-
-        //This bytes[] has bytes in decimal format;
-        //Convert it to hexadecimal format
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i< bytes.length ;i++)
-        {
-            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-
-        //return complete hash
-        return sb.toString();
-    }
 
     /*
     Print the database's hash
@@ -73,7 +43,7 @@ public class SecretPrinterController {
     public SecretPrinter printDb() throws IOException, NoSuchAlgorithmException {
         File db = new File("/tmp/secretVault/data/database.mv.db");
         MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
-        String shaCheckSum = getFileChecksum(shaDigest, db);
+        String shaCheckSum = HashUtils.getFileChecksum(shaDigest, db);
         return new SecretPrinter(shaCheckSum , "database");
     }
 
@@ -84,7 +54,7 @@ public class SecretPrinterController {
     public SecretPrinter printVolume() throws IOException, NoSuchAlgorithmException {
         File volume = new File("/tmp/secretVault/data/volume.fspf");
         MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
-        String shaCheckSum = getFileChecksum(shaDigest, volume);
+        String shaCheckSum = HashUtils.getFileChecksum(shaDigest, volume);
         return new SecretPrinter(shaCheckSum , "volume");
     }
 
@@ -98,10 +68,9 @@ public class SecretPrinterController {
         String secret=System.getenv("SECRET");
         String key=System.getenv("KEY");
         Secret secretSession = new Secret(secret,key);
-        secretSession.writeSecretToDB(jdbcTemplate);
+        SecretService.writeSecretToDB(jdbcTemplate, secretSession);
         return new SecretPrinter(secretSession.getSecret() , secretSession.getKey(), "Your secret and key have " +
                 "been pushed to the database. You can see them at localhost:8080/h2-console");
-
     }
 
     /*
@@ -111,7 +80,7 @@ public class SecretPrinterController {
     public SecretPrinter pushSecret(@RequestParam(value = "secret", defaultValue = "mySecret") String pushedSecret,
                                @RequestParam(value = "key", defaultValue = "mickey") String pushedKey) {
         this.secret  = new Secret(pushedSecret, pushedKey);
-        this.secret.writeSecretToDB(jdbcTemplate);
+        SecretService.writeSecretToDB(jdbcTemplate, secret);
         return new SecretPrinter( secret.getSecret(), secret.getKey());
     }
 
@@ -120,7 +89,7 @@ public class SecretPrinterController {
      */
     @GetMapping("/getsecret")
     public SecretPrinter getSecret(@RequestParam(value = "key", defaultValue = "") String key) throws SQLException {
-        Secret unlockedSecret = getSecretFromDB(key);
+        Secret unlockedSecret = SecretService.getSecretFromDB(key);
         if (unlockedSecret.getSecret() == "") {
             return new SecretPrinter("Your secret is empty or this key doesn't exist.", key);
         } else {
@@ -128,17 +97,4 @@ public class SecretPrinterController {
         }
     }
 
-    /*
-    Will go through the H2 database to retrieve a Secret corresponding ti the given Key.
-     */
-    public Secret getSecretFromDB(String key) throws SQLException {
-        Secret secrets = null;
-        System.out.println("Creating statement...");
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT secret FROM Secrets WHERE key = '" + key +"'");
-        while (rs.next()) {
-            secrets = new Secret(rs.getString(1), key);
-        }
-        return secrets;
-    }
 }
