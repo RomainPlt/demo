@@ -6,8 +6,8 @@ RUN which java
 
 RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb \
 && scone fspf addr fspf.pb /  --not-protected --kernel / \
-&& scone fspf addr fspf.pb /tmp --encrypted --kernel /tmp  \
-&& scone fspf addf fspf.pb /tmp /tmp /tmp \
+&& scone fspf addr fspf.pb /tmp/demo/data --encrypted --kernel /tmp/demo/data \
+&& scone fspf addf fspf.pb /tmp/demo/data /tmp/demo/data /tmp/demo/data \
 && scone fspf encrypt ./fspf.pb > /conf/keytag                          \
 && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            \
 && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    \

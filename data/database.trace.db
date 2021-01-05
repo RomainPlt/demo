@@ -1,4 +1,4 @@
-2021-01-04 15:58:47 database: flush
+2021-01-05 08:31:01 database: flush
 org.h2.message.DbException: General error: "java.lang.IllegalStateException: Store header is corrupt: nio:/tmp/demo/data/database.mv.db [1.4.193/6]" [50000-193]
 	at org.h2.message.DbException.get(DbException.java:168)
 	at org.h2.message.DbException.convert(DbException.java:295)
@@ -42,7 +42,7 @@ Caused by: java.lang.IllegalStateException: Store header is corrupt: nio:/tmp/de
 	at org.h2.mvstore.MVStore.readStoreHeader(MVStore.java:609)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:359)
 	... 29 more
-2021-01-04 15:58:50 database: flush
+2021-01-05 08:31:05 database: flush
 org.h2.message.DbException: General error: "java.lang.IllegalStateException: Store header is corrupt: nio:/tmp/demo/data/database.mv.db [1.4.193/6]" [50000-193]
 	at org.h2.message.DbException.get(DbException.java:168)
 	at org.h2.message.DbException.convert(DbException.java:295)
@@ -150,7 +150,7 @@ Caused by: java.lang.IllegalStateException: Store header is corrupt: nio:/tmp/de
 	at org.h2.mvstore.MVStore.readStoreHeader(MVStore.java:609)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:359)
 	... 93 more
-2021-01-04 15:58:51 database: flush
+2021-01-05 08:31:06 database: flush
 org.h2.message.DbException: General error: "java.lang.IllegalStateException: Store header is corrupt: nio:/tmp/demo/data/database.mv.db [1.4.193/6]" [50000-193]
 	at org.h2.message.DbException.get(DbException.java:168)
 	at org.h2.message.DbException.convert(DbException.java:295)
