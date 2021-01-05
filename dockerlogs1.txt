@@ -1,0 +1,36 @@
+Sending build context to Docker daemon   29.7MB
+Step 1/7 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
+ ---> 5a8a620823b3
+Step 2/7 : ARG JAR_FILE=build/libs/*.jar
+ ---> Running in 0409869b0339
+Removing intermediate container 0409869b0339
+ ---> 1e7fccfa2e6f
+Step 3/7 : COPY ${JAR_FILE} app.jar
+ ---> a00148a528fb
+Step 4/7 : RUN which java
+ ---> Running in f81a1e5e8e2a
+/usr/bin/java
+Removing intermediate container f81a1e5e8e2a
+ ---> 339b21055ffc
+Step 5/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb && scone fspf addr fspf.pb / --not-protected --kernel / && scone fspf addr fspf.pb /tmp/demo/data --encrypted --kernel /tmp/demo/data && scone fspf addf fspf.pb /tmp/demo/data /tmp/demo/data && scone fspf encrypt ./fspf.pb > /conf/keytag 			  && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    && FSPF_KEY=$(cat conf/keytag | awk '{print $11}')		                && echo "<MRENCLAVE>$MRENCLAVE</MRENCLAVE>"             && echo "<FSPF_KEY>$FSPF_KEY</FSPF_KEY>"			                    && echo "<FSPF_TAG>$FSPF_TAG</FSPF_TAG>"
+ ---> Running in 6efa79e3f286
+Created empty file system protection file in fspf.pb. AES-GCM tag: 1b0eceb64a44820d49ca053578795685
+Added region / to file system protection file fspf.pb new AES-GCM tag: 46d5a478ae448a5ab38b3d875b6938eb
+Added region /tmp/demo/data to file system protection file fspf.pb new AES-GCM tag: 2a092dcf643d6a5465ed0f0a5680589f
+Added files to file system protection file fspf.pb new AES-GCM tag: 9e21b22340dc1fd4fd32357c25eba548
+<MRENCLAVE>fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952</MRENCLAVE>
+<FSPF_KEY>108ac8edfb6bb99a2857111816ae69d2270930f86004aaf392c5c37a7260d189</FSPF_KEY>
+<FSPF_TAG>4ef00c83b1c05bb571ba7aee328cbb4e</FSPF_TAG>
+Removing intermediate container 6efa79e3f286
+ ---> a180ae1804a6
+Step 6/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
+ ---> Running in dcb2b8343e53
+fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952
+Removing intermediate container dcb2b8343e53
+ ---> 9dad21c49732
+Step 7/7 : ENTRYPOINT ["java","-jar","/app.jar"]
+ ---> Running in 1f6cbf643c90
+Removing intermediate container 1f6cbf643c90
+ ---> 985a173e7161
+Successfully built 985a173e7161
+Successfully tagged romainplt/demo:latest

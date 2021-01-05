@@ -8,13 +8,17 @@ services:
     devices:
       - /dev/isgx
     volumes:
-            - demo:/home/demo:rw
+      - /home/romain/Documents/rest_app/demo/data:/tmp/demo/data:rw
     environment:
+      - SCONE_LAS_ADDR=las
+      - SCONE_CONFIG_ID=session_demo/demo
+      - SCONE_CAS_ADDR=cas
+      - SCONE_FORK=1
+      - SCONE_SESSION_ID=session_demo
       - SCONE_VERSION=1
       - SCONE_LOG=7
-      - SCONE_MODE=HW
+      - SCONE_MODE=hw
       - SCONE_HEAP=2G
-      - JAVA_TOOL_OPTIONS=-Xmx64m
     networks:
       - romain-net
 
