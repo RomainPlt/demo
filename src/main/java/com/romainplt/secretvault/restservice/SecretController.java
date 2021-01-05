@@ -16,25 +16,11 @@ import java.sql.*;
 public class SecretController {
 
     public Secret secret;
-    public static Connection conn;
+    public SecretService secretService;
 
-    static {
-        try {
-            conn = DriverManager.getConnection("jdbc:h2:file:/tmp/secretVault/data/database", "sa", "admin");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+    public SecretController(SecretService secretService){
+        this.secretService = secretService;
     }
-
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    public SecretController(JdbcTemplate jdbcTemplate){
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS Secrets (key VARCHAR(255), secret VARCHAR(255));");
-    }
-
-
 
     /*
     Print the database's hash
@@ -68,7 +54,7 @@ public class SecretController {
         String secret=System.getenv("SECRET");
         String key=System.getenv("KEY");
         Secret secretSession = new Secret(secret,key);
-        SecretService.writeSecretToDB(jdbcTemplate, secretSession);
+        secretService.writeSecretToDB(secretSession);
         return new SecretPrinter(secretSession.getSecret() , secretSession.getKey(), "Your secret and key have " +
                 "been pushed to the database. You can see them at localhost:8080/h2-console");
     }
@@ -80,7 +66,7 @@ public class SecretController {
     public SecretPrinter pushSecret(@RequestParam(value = "secret", defaultValue = "mySecret") String pushedSecret,
                                @RequestParam(value = "key", defaultValue = "mickey") String pushedKey) {
         this.secret  = new Secret(pushedSecret, pushedKey);
-        SecretService.writeSecretToDB(jdbcTemplate, secret);
+        secretService.writeSecretToDB(secret);
         return new SecretPrinter( secret.getSecret(), secret.getKey());
     }
 
@@ -89,7 +75,7 @@ public class SecretController {
      */
     @GetMapping("/getsecret")
     public SecretPrinter getSecret(@RequestParam(value = "key", defaultValue = "") String key) throws SQLException {
-        Secret unlockedSecret = SecretService.getSecretFromDB(key);
+        Secret unlockedSecret = secretService.getSecretFromDB(key);
         if (unlockedSecret.getSecret() == "") {
             return new SecretPrinter("Your secret is empty or this key doesn't exist.", key);
         } else {
