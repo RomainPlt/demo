@@ -1,6 +1,7 @@
-package com.romainplt.secretVault;
+package com.romainplt.secretvault;
 
-import com.romainplt.secretVault.restservice.SecretPrinterController;
+import com.romainplt.secretvault.restservice.HashUtils;
+import com.romainplt.secretvault.restservice.SecretController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.File;
@@ -30,7 +31,7 @@ public class SecretVaultApplication {
 	public static void printDbHashBeforeRun() throws NoSuchAlgorithmException, IOException {
 		File db = new File("/tmp/secretVault/data/database.mv.db");
 		MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
-		String shaCheckSum = SecretPrinterController.getFileChecksum(shaDigest, db);
+		String shaCheckSum = HashUtils.getFileChecksum(shaDigest, db);
 		System.out.println("HASH DE LA DB : " + shaCheckSum);
 	}
 }

@@ -1,4 +1,4 @@
-package com.romainplt.secretVault;
+package com.romainplt.secretvault;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.romainplt.secretVault.restservice;
+package com.romainplt.secretvault.restservice;
 
 public class SecretPrinter {
 
