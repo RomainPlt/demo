@@ -50,7 +50,7 @@ public class SecretController {
         - Write them in the H2 Database
         - Print them
      */
-    @GetMapping("/session/secret")
+    @PostMapping("/session/secret")
     public ResponseEntity<String> pushSecretFromSession(){
         String secret=System.getenv("SECRET");
         String key=System.getenv("KEY");

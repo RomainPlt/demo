@@ -2872,3 +2872,27 @@ See https://docs.gradle.org/6.6.1/userguide/command_line_interface.html#sec:comm
 
 BUILD SUCCESSFUL in 1s
 5 actionable tasks: 5 up-to-date
+> Task :compileJava
+> Task :processResources UP-TO-DATE
+> Task :classes
+> Task :bootJar
+> Task :jar SKIPPED
+> Task :assemble
+> Task :compileTestJava UP-TO-DATE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+
+> Task :test
+2021-01-06 16:10:41.627  INFO 32988 --- [extShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2021-01-06 16:10:41.627  INFO 32988 --- [extShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-01-06 16:10:41.632  INFO 32988 --- [extShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+> Task :check
+> Task :build
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 7.0.
+Use '--warning-mode all' to show the individual deprecation warnings.
+See https://docs.gradle.org/6.6.1/userguide/command_line_interface.html#sec:command_line_warnings
+
+BUILD SUCCESSFUL in 4s
+5 actionable tasks: 3 executed, 2 up-to-date
