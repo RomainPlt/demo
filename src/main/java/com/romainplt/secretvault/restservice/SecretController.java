@@ -8,9 +8,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 @RestController
 @RequestMapping("/vault")
@@ -45,22 +52,30 @@ public class SecretController {
         return new ResponseEntity<>("Volume's hash : " + shaCheckSum , HttpStatus.OK);
     }
 
+
     /*
     Retrieve secrets and keys from session on CAS and :
         - Write them in the H2 Database
         - Print them
      */
-
-
     @PostMapping("/session/secret")
-    public ResponseEntity<String> pushSecretFromSession(){
+    public ResponseEntity<SecretService.JsonResponse> pushSecretFromSession() throws NoSuchAlgorithmException {
         String secret=System.getenv("SECRET");
         String key=System.getenv("KEY");
         Secret secretSession = new Secret(secret,key);
         secretService.writeSecretToDB(secretSession);
-        return new ResponseEntity<>("Key : " + secretSession.getKey() + "\nSecret : " + secretSession.getSecret()
-                + "\nYour secret and key have " +
-                "been pushed to the database. You can see them at localhost:8080/h2-console", HttpStatus.OK);
+        Date date = new Date();
+        SecretService.JsonResponse jsonResponse = new SecretService.JsonResponse();
+
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(
+                secret.getBytes(StandardCharsets.UTF_8));
+
+        jsonResponse.setHash(HashUtils.bytesToHex(encodedHash));
+        jsonResponse.setKey(key);
+        jsonResponse.setDate(date);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        return new ResponseEntity<SecretService.JsonResponse>(jsonResponse, httpHeaders, HttpStatus.OK);
     }
 
     /*
