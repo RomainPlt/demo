@@ -17,7 +17,7 @@ public class SecretVaultApplication {
 	public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
 		Path path = Paths.get("/tmp/secretVault/data/database.mv.db");
 		if (Files.exists(path)){
-			printDbHashBeforeRun();
+			HashUtils.printDbHashBeforeRun(path);
 		}
 		SpringApplication.run(SecretVaultApplication.class, args);
 		Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -28,10 +28,5 @@ public class SecretVaultApplication {
 		System.out.println("Application Terminating ...");
 	}
 
-	public static void printDbHashBeforeRun() throws NoSuchAlgorithmException, IOException {
-		File db = new File("/tmp/secretVault/data/database.mv.db");
-		MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
-		String shaCheckSum = HashUtils.getFileChecksum(shaDigest, db);
-		System.out.println("HASH DE LA DB : " + shaCheckSum);
-	}
+
 }

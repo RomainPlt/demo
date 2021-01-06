@@ -1,36 +1,36 @@
-Sending build context to Docker daemon  35.72MB
+Sending build context to Docker daemon  35.86MB
 Step 1/7 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
  ---> 5a8a620823b3
 Step 2/7 : ARG JAR_FILE=build/libs/*.jar
- ---> Running in 233e5477da06
-Removing intermediate container 233e5477da06
- ---> 03b5deaf5d85
+ ---> Running in 478be209b2a6
+Removing intermediate container 478be209b2a6
+ ---> 7addb3591d1e
 Step 3/7 : COPY ${JAR_FILE} app.jar
- ---> 5b7388bc4cb2
+ ---> 1fbea3bfe24a
 Step 4/7 : RUN which java
- ---> Running in 2eeebcda1ea0
+ ---> Running in 90a21673883c
 /usr/bin/java
-Removing intermediate container 2eeebcda1ea0
- ---> ea4eb34249c0
-Step 5/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb && scone fspf addr fspf.pb /  --not-protected --kernel / && scone fspf addr fspf.pb /tmp/secretVault/data --encrypted --kernel /tmp/secretVault/data && scone fspf addf fspf.pb /tmp/secretVault/data /tmp/secretVault/data && scone fspf encrypt ./fspf.pb > /conf/keytag                          && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    && FSPF_KEY=$(cat conf/keytag | awk '{print $11}')		                && echo "<MRENCLAVE>$MRENCLAVE</MRENCLAVE>"                             && echo "<FSPF_KEY>$FSPF_KEY</FSPF_KEY>"			                    && echo "<FSPF_TAG>$FSPF_TAG</FSPF_TAG>"
- ---> Running in 0ad65b921cd0
-Created empty file system protection file in fspf.pb. AES-GCM tag: 9f1aa9e8a2f04d0772eac54bbd363639
-Added region / to file system protection file fspf.pb new AES-GCM tag: 12b9a8ed4ad78775a5211a6e7b6ee9e3
-Added region /tmp/secretVault/data to file system protection file fspf.pb new AES-GCM tag: 121f7faad13df6841bd51e38f3d34f7b
-Added files to file system protection file fspf.pb new AES-GCM tag: 2ff4a8557cfef0922795d9d5cb3609bc
+Removing intermediate container 90a21673883c
+ ---> 487cc06f195b
+Step 5/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb && scone fspf addr fspf.pb /  --not-protected --kernel / && scone fspf addr fspf.pb /tmp/secret-vault/data --encrypted --kernel /tmp/secret-vault/data && scone fspf addf fspf.pb /tmp/secret-vault/data /tmp/secret-vault/data && scone fspf encrypt ./fspf.pb > /conf/keytag                          && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    && FSPF_KEY=$(cat conf/keytag | awk '{print $11}')		                && echo "<MRENCLAVE>$MRENCLAVE</MRENCLAVE>"                             && echo "<FSPF_KEY>$FSPF_KEY</FSPF_KEY>"			                    && echo "<FSPF_TAG>$FSPF_TAG</FSPF_TAG>"
+ ---> Running in e95894cf61e7
+Created empty file system protection file in fspf.pb. AES-GCM tag: 40a9e17a0969c5d9fa73a3fc0aeddf95
+Added region / to file system protection file fspf.pb new AES-GCM tag: b9f9b416b5c896a0b48c2bb6a5a1a346
+Added region /tmp/secret-vault/data to file system protection file fspf.pb new AES-GCM tag: 69e054ec69c4ad5ab8ec7cc2444790c5
+Added files to file system protection file fspf.pb new AES-GCM tag: af31162adb3b839327109f5e1816b8b4
 <MRENCLAVE>fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952</MRENCLAVE>
-<FSPF_KEY>7f5c71f4bde5b3534c9d7dd2badb0efbea2db8c938d0185728319acb3c513b30</FSPF_KEY>
-<FSPF_TAG>a24b1215ae1b1268b85506616a8c6692</FSPF_TAG>
-Removing intermediate container 0ad65b921cd0
- ---> 63a0a5bd3a41
+<FSPF_KEY>701945305d83cd5ed5276e9510ab285ae5234f5c525a997de097daed301e331f</FSPF_KEY>
+<FSPF_TAG>fe42ab7d67197bc677e6082c3cdf8d75</FSPF_TAG>
+Removing intermediate container e95894cf61e7
+ ---> 1417ba01348c
 Step 6/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
- ---> Running in b0c2d0362fed
+ ---> Running in d04cdc3ad5a2
 fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952
-Removing intermediate container b0c2d0362fed
- ---> 53b3b259b0a7
+Removing intermediate container d04cdc3ad5a2
+ ---> e3843c1b07c0
 Step 7/7 : ENTRYPOINT ["java","-jar","/app.jar"]
- ---> Running in 1fa37a67db7d
-Removing intermediate container 1fa37a67db7d
- ---> 57a2abc9d999
-Successfully built 57a2abc9d999
-Successfully tagged romainplt/secretvault:latest
+ ---> Running in fdfb108fdaa8
+Removing intermediate container fdfb108fdaa8
+ ---> faa61c02a709
+Successfully built faa61c02a709
+Successfully tagged romainplt/secret-vault:latest

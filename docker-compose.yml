@@ -1,8 +1,8 @@
 version: '3.4'
 services:
-  secretVault:
-    image: romainplt/secretvault
-    container_name: secretvault
+  secret-vault:
+    image: romainplt/secret-vault
+    container_name: secret-vault
     ports:
       - 8080:8080
     devices:
@@ -11,10 +11,10 @@ services:
       - /home/romain/Documents/rest_app/secretVault/data:/tmp/secretVault/data:rw
     environment:
       - SCONE_LAS_ADDR=las
-      - SCONE_CONFIG_ID=session_secretVault/secretVault
+      - SCONE_CONFIG_ID=session_secret-vault/secret-vault
       - SCONE_CAS_ADDR=cas
       - SCONE_FORK=1
-      - SCONE_SESSION_ID=session_secretVault
+      - SCONE_SESSION_ID=session_secret-vault
       - SCONE_VERSION=1
       - SCONE_LOG=7
       - SCONE_MODE=hw
@@ -23,7 +23,7 @@ services:
       - romain-net
 
 volumes:
-  secretVault:
+  secret-vault:
     external: true
 
 networks:
