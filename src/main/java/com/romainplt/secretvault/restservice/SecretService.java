@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.util.Date;
 
 @Service
 public class SecretService {
@@ -45,6 +46,24 @@ public class SecretService {
     public void writeSecretToDB(Secret secret) {
         jdbcTemplate.execute(createTable);
         jdbcTemplate.execute("INSERT INTO Secrets(key,secret) VALUES ('" + secret.getKey() + "' ,'" + secret.getSecret() + "')");
+    }
+
+
+    public static class JsonResponse{
+        private String key;
+        private String hash;
+        private java.util.Date date;
+
+        public String getHash() {
+            return this.hash;
+        }
+        public String getKey() {
+            return this.key;
+        }
+        public java.util.Date getDate() { return this.date; }
+        public void setHash(String hash) { this.hash = hash; }
+        public void setKey(String key) { this.key = key; }
+        public void setDate(Date date) { this.date = date; }
     }
 
 
