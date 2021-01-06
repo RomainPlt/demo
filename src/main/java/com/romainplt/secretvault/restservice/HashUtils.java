@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.file.*;
 
 public class HashUtils {
 
@@ -38,6 +40,16 @@ public class HashUtils {
         //return complete hash
         return sb.toString();
     }
+
+
+    public static void printDbHashBeforeRun(Path path) throws NoSuchAlgorithmException, IOException {
+        File db = new File(String.valueOf(path));
+        MessageDigest shaDigest = MessageDigest.getInstance("SHA-256");
+        String shaCheckSum = HashUtils.getFileChecksum(shaDigest, db);
+        System.out.println("HASH DE LA DB : " + shaCheckSum);
+    }
+
+
 
 
 }
