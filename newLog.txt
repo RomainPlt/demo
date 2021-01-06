@@ -2872,6 +2872,7 @@ See https://docs.gradle.org/6.6.1/userguide/command_line_interface.html#sec:comm
 
 BUILD SUCCESSFUL in 1s
 5 actionable tasks: 5 up-to-date
+<<<<<<< HEAD
 > Task :compileJava
 > Task :processResources UP-TO-DATE
 > Task :classes
@@ -2896,3 +2897,5 @@ See https://docs.gradle.org/6.6.1/userguide/command_line_interface.html#sec:comm
 
 BUILD SUCCESSFUL in 4s
 5 actionable tasks: 3 executed, 2 up-to-date
+=======
+>>>>>>> e4a697a996fb57474c282c250b3fb00e371df988

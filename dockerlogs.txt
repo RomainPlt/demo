@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Sending build context to Docker daemon  35.91MB
 Step 1/7 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
  ---> 5a8a620823b3
@@ -33,4 +34,41 @@ Step 7/7 : ENTRYPOINT ["java","-jar","/app.jar"]
 Removing intermediate container 4414bb65c7e9
  ---> 649cb9f5c505
 Successfully built 649cb9f5c505
+=======
+Sending build context to Docker daemon  35.86MB
+Step 1/7 : FROM sconecuratedimages/public-apps:openjdk-11-alpine-scone3.0
+ ---> 5a8a620823b3
+Step 2/7 : ARG JAR_FILE=build/libs/*.jar
+ ---> Running in 478be209b2a6
+Removing intermediate container 478be209b2a6
+ ---> 7addb3591d1e
+Step 3/7 : COPY ${JAR_FILE} app.jar
+ ---> 1fbea3bfe24a
+Step 4/7 : RUN which java
+ ---> Running in 90a21673883c
+/usr/bin/java
+Removing intermediate container 90a21673883c
+ ---> 487cc06f195b
+Step 5/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 && mkdir conf && scone fspf create fspf.pb && scone fspf addr fspf.pb /  --not-protected --kernel / && scone fspf addr fspf.pb /tmp/secret-vault/data --encrypted --kernel /tmp/secret-vault/data && scone fspf addf fspf.pb /tmp/secret-vault/data /tmp/secret-vault/data && scone fspf encrypt ./fspf.pb > /conf/keytag                          && MRENCLAVE="$(SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar)"			            && FSPF_TAG=$(cat conf/keytag | awk '{print $9}') 	                    && FSPF_KEY=$(cat conf/keytag | awk '{print $11}')		                && echo "<MRENCLAVE>$MRENCLAVE</MRENCLAVE>"                             && echo "<FSPF_KEY>$FSPF_KEY</FSPF_KEY>"			                    && echo "<FSPF_TAG>$FSPF_TAG</FSPF_TAG>"
+ ---> Running in e95894cf61e7
+Created empty file system protection file in fspf.pb. AES-GCM tag: 40a9e17a0969c5d9fa73a3fc0aeddf95
+Added region / to file system protection file fspf.pb new AES-GCM tag: b9f9b416b5c896a0b48c2bb6a5a1a346
+Added region /tmp/secret-vault/data to file system protection file fspf.pb new AES-GCM tag: 69e054ec69c4ad5ab8ec7cc2444790c5
+Added files to file system protection file fspf.pb new AES-GCM tag: af31162adb3b839327109f5e1816b8b4
+<MRENCLAVE>fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952</MRENCLAVE>
+<FSPF_KEY>701945305d83cd5ed5276e9510ab285ae5234f5c525a997de097daed301e331f</FSPF_KEY>
+<FSPF_TAG>fe42ab7d67197bc677e6082c3cdf8d75</FSPF_TAG>
+Removing intermediate container e95894cf61e7
+ ---> 1417ba01348c
+Step 6/7 : RUN SCONE_MODE=SIM SCONE_HEAP=2G SCONE_LOG=7 SCONE_HASH=1 SCONE_ALPINE=1 /usr/bin/java -jar app.jar
+ ---> Running in d04cdc3ad5a2
+fadce3e7796887ec2c5cd64cc1fbc3a5f8b3a44a4a5f5eb00cf171e5ea84e952
+Removing intermediate container d04cdc3ad5a2
+ ---> e3843c1b07c0
+Step 7/7 : ENTRYPOINT ["java","-jar","/app.jar"]
+ ---> Running in fdfb108fdaa8
+Removing intermediate container fdfb108fdaa8
+ ---> faa61c02a709
+Successfully built faa61c02a709
+>>>>>>> e4a697a996fb57474c282c250b3fb00e371df988
 Successfully tagged romainplt/secret-vault:latest
