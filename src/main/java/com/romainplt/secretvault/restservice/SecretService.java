@@ -27,9 +27,6 @@ public class SecretService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void createDatabase(){
-        new SecretService(jdbcTemplate);
-    }
     /*
     Will go through the H2 database to retrieve the Secret corresponding to the given Key.
     */
